@@ -27,6 +27,7 @@ from zato.admin.web.views.channel import json_rpc as channel_json_rpc
 from zato.admin.web.views.channel import web_socket as channel_web_socket
 from zato.admin.web.views.channel import zmq as channel_zmq
 from zato.admin.web.views.cloud.aws import s3 as cloud_aws_s3
+from zato.admin.web.views.cloud import dropbox as cloud_dropbox
 from zato.admin.web.views.cloud.openstack import swift as cloud_openstack_swift
 from zato.admin.web.views import config_file
 from zato.admin.web.views.definition import amqp_ as def_amqp
@@ -1324,6 +1325,26 @@ urlpatterns += [
         login_required(cloud_aws_s3.Edit()), name=cloud_aws_s3.Edit.url_name),
     url(r'^zato/cloud/aws/s3/delete/(?P<id>.*)/cluster/(?P<cluster_id>.*)/$',
         login_required(cloud_aws_s3.Delete()), name=cloud_aws_s3.Delete.url_name),
+    ]
+
+# ################################################################################################################################
+
+urlpatterns += [
+
+    # .. Dropbox
+
+    url(r'^zato/cloud/dropbox/$',
+        login_required(cloud_dropbox.Index()), name=cloud_dropbox.Index.url_name),
+    url(r'^zato/cloud/dropbox/create/$',
+        login_required(cloud_dropbox.Create()), name=cloud_dropbox.Create.url_name),
+    url(r'^zato/cloud/dropbox/edit/$',
+        login_required(cloud_dropbox.Edit()), name=cloud_dropbox.Edit.url_name),
+    url(r'^zato/cloud/dropbox/delete/(?P<id>.*)/cluster/(?P<cluster_id>.*)/$',
+        login_required(cloud_dropbox.Delete()), name=cloud_dropbox.Delete.url_name),
+    url(r'^zato/cloud/dropbox/ping/(?P<id>.*)/cluster/(?P<cluster_id>.*)/$',
+        login_required(cloud_dropbox.ping), name='cloud-dropbox-ping'),
+    url(r'^zato/cloud/dropbox/change-password/$',
+        login_required(cloud_dropbox.change_password), name='cloud-dropbox-change-password'),
     ]
 
 # ################################################################################################################################

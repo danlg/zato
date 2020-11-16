@@ -10,6 +10,7 @@ Licensed under LGPLv3, see LICENSE.txt for terms and conditions.
 from contextlib import closing
 from copy import deepcopy
 from datetime import datetime
+from traceback import format_exc
 
 # Zato
 from zato.common.api import GENERIC as COMMON_GENERIC
@@ -17,6 +18,7 @@ from zato.common.broker_message import GENERIC
 from zato.common.json_internal import dumps, loads
 from zato.common.odb.model import GenericConn as ModelGenericConn
 from zato.common.odb.query.generic import connection_list
+from zato.common.util.api import parse_simple_type
 from zato.server.generic.connection import GenericConnection
 from zato.server.service import Bool, Int
 from zato.server.service.internal import AdminService, AdminSIO, ChangePasswordBase, GetListAdminSIO
@@ -58,6 +60,15 @@ config_dict_id_name_outconnn = {
 }
 
 # ################################################################################################################################
+
+extra_secret_keys = (
+
+    #
+    # Dropbox
+    #
+    'oauth2_access_token',
+)
+
 # ################################################################################################################################
 
 class _CreateEditSIO(AdminSIO):
@@ -91,7 +102,11 @@ class _CreateEdit(_BaseService):
 
         for key, value in raw_request.items():
             if key not in data:
-                data[key] = self._convert_sio_elem(key, value)
+
+                value = parse_simple_type(value)
+                value = self._sio.eval_(key, value, self.server.encrypt)
+
+                data[key] = value
 
         conn = GenericConnection.from_dict(data)
 
@@ -242,7 +257,10 @@ class ChangePassword(ChangePasswordBase):
     def handle(self):
 
         def _auth(instance, secret):
-            instance.secret = secret
+            if secret:
+
+                # Always encrypt the secret given on input
+                instance.secret = self.server.encrypt(secret)
 
         if self.request.input.id:
             instance_id = self.request.input.id
@@ -282,10 +300,14 @@ class Ping(_BaseService):
             ping_func = custom_ping_func_dict.get(instance.type_, self.server.worker_store.ping_generic_connection)
 
             start_time = datetime.utcnow()
-            ping_func(self.request.input.id)
-            response_time = datetime.utcnow() - start_time
 
-            self.response.payload.info = 'Connection pinged; response time: {}'.format(response_time)
+            try:
+                ping_func(self.request.input.id)
+            except Exception:
+                self.response.payload.info = format_exc()
+            else:
+                response_time = datetime.utcnow() - start_time
+                self.response.payload.info = 'Connection pinged; response time: {}'.format(response_time)
 
 # ################################################################################################################################
 # ################################################################################################################################
