@@ -107,7 +107,7 @@ switch_to_basedir
 #
 # Run an OS-specific installer
 #
-
+set -x
 if [ -d "/etc/zypp/" ]
 then
     source ./clean.sh
