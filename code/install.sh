@@ -108,7 +108,11 @@ switch_to_basedir
 # Run an OS-specific installer
 #
 
-if [ "$(type -p apt-get)" ]
+if [ -d "/etc/zypp/" ]
+then
+    source ./clean.sh
+    source ./_install-suse.sh $PY_BINARY
+elif [ "$(type -p apt-get)" ]
 then
     source ./clean.sh
     source ./_install-deb.sh $PY_BINARY
@@ -120,10 +124,6 @@ elif [ "$(uname -s)" = "Darwin" ]
 then
     source ./clean.sh
     source ./_install-mac.sh $PY_BINARY
-elif [ "$(type -p zypper)" ]
-then
-    source ./clean.sh
-    source ./_install-suse.sh $PY_BINARY
 else
     echo "install.sh: Unsupported OS: could not detect Mac, apt-get, yum or zypper." >&2
     exit 1
