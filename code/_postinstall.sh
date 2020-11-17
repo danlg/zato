@@ -87,7 +87,7 @@ patch -p0 -d eggs < $basedir/patches/ws4py/server/geventserver.py.diff
 #
 # On SUSE, SQLAlchemy installs to lib64 instead of lib.
 #
-if [[ "$(type -p zypper)" && -f eggs64 ]]
+if [[ "$(type -p zypper)" && -e eggs64 ]]
 then
     patch -p0 -d eggs64 < $basedir/patches/sqlalchemy/sql/crud.py.diff
 else
