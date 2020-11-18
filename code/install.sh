@@ -26,7 +26,11 @@ shift $((OPTIND-1))
 
 # Not installed?
 if ! [ -x "$(command -v $PY_BINARY)" ]; then
-  if [ "$(type -p apt-get)" ]
+  if [ "$(type -p zypper)" ]
+  then
+      sudo zypper update -y
+      sudo zypper in -y $PY_BINARY
+  elif [ "$(type -p apt-get)" ]
   then
       sudo apt-get update
       sudo apt-get install -y --reinstall ${PY_BINARY}
@@ -108,7 +112,8 @@ switch_to_basedir
 # Run an OS-specific installer
 #
 set -x
-if [ -d "/etc/zypp/" ]
+ls -alh /etc
+if [ "$(type -p zypper)" ]
 then
     source ./clean.sh
     source ./_install-suse.sh $PY_BINARY
