@@ -29,7 +29,7 @@ if ! [ -x "$(command -v $PY_BINARY)" ]; then
   if [ "$(type -p zypper)" ]
   then
       sudo zypper update -y
-      sudo zypper in -y $PY_BINARY
+      sudo zypper install -y $PY_BINARY
   elif [ "$(type -p apt-get)" ]
   then
       sudo apt-get update
@@ -66,7 +66,7 @@ if ! [ -x "$(command -v $PY_BINARY)" ]; then
   then
       brew install  $PY_BINARY
   else
-      echo "install.sh: Unsupported OS: could not detect OS X, apt-get or yum." >&2
+      echo "install.sh: Unsupported OS: could not detect OS X, apt-get, yum or zypper." >&2
       exit 1
   fi
 fi
