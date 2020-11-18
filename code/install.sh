@@ -26,7 +26,7 @@ shift $((OPTIND-1))
 
 # Not installed?
 if ! [ -x "$(command -v $PY_BINARY)" ]; then
-  if [ "$(type -p zypper)" ]
+  if [ -x "$(command -v zypper)" ]
   then
       sudo zypper update -y
       sudo zypper install -y $PY_BINARY
@@ -112,7 +112,7 @@ switch_to_basedir
 # Run an OS-specific installer
 #
 set -x
-if [ "$(type -p zypper)" ]
+if [ -x "$(command -v zypper)" ]
 then
     source ./clean.sh
     source ./_install-suse.sh $PY_BINARY
