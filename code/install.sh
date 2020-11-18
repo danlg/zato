@@ -112,7 +112,6 @@ switch_to_basedir
 # Run an OS-specific installer
 #
 set -x
-ls -alh /etc
 if [ "$(type -p zypper)" ]
 then
     source ./clean.sh
