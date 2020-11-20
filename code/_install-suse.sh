@@ -25,4 +25,5 @@ $PY_BINARY -m pip install       \
 
 $PY_BINARY -m virtualenv .
 source ./bin/activate
+./bin/$PY_BINARY -m pip install -U setuptools pip
 source ./_postinstall.sh $PY_BINARY
