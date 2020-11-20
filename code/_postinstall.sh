@@ -44,7 +44,7 @@ $PY_BINARY -m pip install --use-feature=2020-resolver \
     -e ./zato-testing
 
 # Emulate zc.buildout's split-out eggs directory for simpler local development.
-ln -fs ../lib/python*/site-packages $VIRTUAL_ENV/eggs
+ln -fs $(find ../lib/ -mindepth 2 -name site-packages| head -n 1 ) $VIRTUAL_ENV/eggs
 
 # Emulate zc.buildout's py script. Wrap rather than symlink to ensure argv[0] is correct.
 cat > $VIRTUAL_ENV/bin/py <<-EOF
