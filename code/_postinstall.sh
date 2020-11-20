@@ -55,31 +55,31 @@ EOF
 chmod +x $VIRTUAL_ENV/bin/py
 
 # Create and add zato_extra_paths to the virtualenv's sys.path.
-mkdir zato_extra_paths
-echo "$VIRTUAL_ENV/zato_extra_paths" >> eggs/easy-install.pth
+mkdir $VIRTUAL_ENV/zato_extra_paths
+echo "$VIRTUAL_ENV/zato_extra_paths" >> $VIRTUAL_ENV/eggs/easy-install.pth
 
 # Create a symlink to zato_extra_paths to make it easier to type it out
 ln -fs $VIRTUAL_ENV/zato_extra_paths extlib
 
 # Apply patches.
-patch -p0 -d eggs < $VIRTUAL_ENV/patches/butler/__init__.py.diff
-patch -p0 -d eggs < $VIRTUAL_ENV/patches/configobj.py.diff
-patch -p0 -d eggs < $VIRTUAL_ENV/patches/django/db/models/base.py.diff
-patch -p0 --binary -d eggs < $VIRTUAL_ENV/patches/ntlm/HTTPNtlmAuthHandler.py.diff
-patch -p0 -d eggs < $VIRTUAL_ENV/patches/pykafka/topic.py.diff
-patch -p0 -d eggs < $VIRTUAL_ENV/patches/redis/redis/connection.py.diff
-patch -p0 -d eggs < $VIRTUAL_ENV/patches/requests/models.py.diff
-patch -p0 -d eggs < $VIRTUAL_ENV/patches/requests/sessions.py.diff
-patch -p0 -d eggs < $VIRTUAL_ENV/patches/ws4py/server/geventserver.py.diff
+patch -p0 -d $VIRTUAL_ENV/eggs < $VIRTUAL_ENV/patches/butler/__init__.py.diff
+patch -p0 -d $VIRTUAL_ENV/eggs < $VIRTUAL_ENV/patches/configobj.py.diff
+patch -p0 -d $VIRTUAL_ENV/eggs < $VIRTUAL_ENV/patches/django/db/models/base.py.diff
+patch -p0 --binary -d $VIRTUAL_ENV/eggs < $VIRTUAL_ENV/patches/ntlm/HTTPNtlmAuthHandler.py.diff
+patch -p0 -d $VIRTUAL_ENV/eggs < $VIRTUAL_ENV/patches/pykafka/topic.py.diff
+patch -p0 -d $VIRTUAL_ENV/eggs < $VIRTUAL_ENV/patches/redis/redis/connection.py.diff
+patch -p0 -d $VIRTUAL_ENV/eggs < $VIRTUAL_ENV/patches/requests/models.py.diff
+patch -p0 -d $VIRTUAL_ENV/eggs < $VIRTUAL_ENV/patches/requests/sessions.py.diff
+patch -p0 -d $VIRTUAL_ENV/eggs < $VIRTUAL_ENV/patches/ws4py/server/geventserver.py.diff
 
 #
 # On SUSE, SQLAlchemy installs to lib64 instead of lib.
 #
-if [[ "$(type -p zypper)" && -e eggs64 ]]
+if [[ "$(type -p zypper)" && -e $VIRTUAL_ENV/eggs64 ]]
 then
-    patch -p0 -d eggs64 < $VIRTUAL_ENV/patches/sqlalchemy/sql/crud.py.diff
+    patch -p0 -d $VIRTUAL_ENV/eggs64 < $VIRTUAL_ENV/patches/sqlalchemy/sql/crud.py.diff
 else
-    patch -p0 -d eggs < $VIRTUAL_ENV/patches/sqlalchemy/sql/crud.py.diff
+    patch -p0 -d $VIRTUAL_ENV/eggs < $VIRTUAL_ENV/patches/sqlalchemy/sql/crud.py.diff
 fi
 
 # Add the 'zato' command ..
