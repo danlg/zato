@@ -30,14 +30,13 @@ src_files = os.path.join('src', 'cpp', '*.cpp')
 
 ext_modules = [
     Pybind11Extension(
-        'libzato',
-        sorted(glob(src_files)),
-        extra_compile_args = ["-std=c++17"],
+        'zato-lib',
+        sorted(glob(src_files))
     )
 ]
 
 setup(
-      name = 'libzato',
+      name = 'zato-lib',
       version = version,
       author = 'Zato Source s.r.o.',
       author_email = 'info@zato.io',
