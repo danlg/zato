@@ -43,6 +43,7 @@ $PY_BINARY -m pip install \
 
 # Emulate zc.buildout's split-out eggs directory for simpler local development.
 ln -fs $(find lib/ -mindepth 1 -name site-packages| head -n 1 ) $VIRTUAL_ENV/eggs
+[[ -d $VIRTUAL_ENV/lib64 ]] && ln -fs $(find lib64/ -mindepth 1 -name site-packages| head -n 1 ) $VIRTUAL_ENV/eggs64
 
 # Emulate zc.buildout's py script. Wrap rather than symlink to ensure argv[0] is correct.
 cat > $VIRTUAL_ENV/bin/py <<-EOF
