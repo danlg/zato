@@ -14,7 +14,7 @@ sudo zypper install -y \
     libffi-devel keyutils-devel libmemcached-devel libpqxx-devel              \
     openldap2-devel libxml2-devel libxslt-devel libyaml-devel openssl         \
     patch $PY_BINARY $PY_BINARY-devel $PY_BINARY-pip uuid-devel               \
-    wget zlib-devel
+    wget zlib-devel postgresql-server-devel
 
 curl https://bootstrap.pypa.io/get-pip.py | $(type -p $PY_BINARY)
 $PY_BINARY -m pip install       \
