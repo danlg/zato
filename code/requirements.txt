@@ -32,9 +32,11 @@ flake8==2.1.0
 fs==2.4.11
 future==0.18.2
 futures==2.1.6
-https://github.com/gevent/gevent/archive/20.6.2.zip#egg=gevent
+gevent==20.6.2
 greenify==0.3.2
 greenlet==0.4.16
+hl7==0.4.1
+hl7apy==1.3.3
 hiredis==0.3.1
 httpagentparser==1.9.0
 httplib2==0.18.1
@@ -59,7 +61,7 @@ kombu==5.0.2
 ldap3==2.8.1
 lxml==4.5.2
 Mako==0.9.0
-markdown==3.3.3
+markdown==2.6.7
 MarkupSafe==1.1.1
 mccabe==0.2.1
 mock==3.0.5
@@ -69,6 +71,7 @@ netifaces==0.10.4
 newrelic==2.20.0.17
 nose==1.3.3
 odoo-client-lib==1.2.2
+openpyxl==3.0.5
 oslo.config==1.2.1
 parse-type==0.3.4
 parse==1.6.6
@@ -81,6 +84,7 @@ portalocker==0.5.7
 posix-ipc==1.0.0
 prettytable==0.7.2
 psutil==5.7.2
+psycopg2==2.8.6 
 py-cpuinfo==3.3.0
 pyaml==20.4.0
 pyasn1==0.4.8

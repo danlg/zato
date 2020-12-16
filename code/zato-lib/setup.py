@@ -32,7 +32,7 @@ ext_modules = [
     Pybind11Extension(
         'zato-lib',
         sorted(glob(src_files)),
-        extra_compile_args = ["-std=c++17"],
+        extra_compile_args = ["-std=c++17"]
     )
 ]
 

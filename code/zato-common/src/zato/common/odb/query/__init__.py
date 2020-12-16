@@ -53,6 +53,18 @@ def count(session, q):
 
 # ################################################################################################################################
 
+class _QueryConfig:
+
+    @staticmethod
+    def supports_kwargs(query_func):
+        """ Returns True if the given query func supports kwargs, False otherwise.
+        """
+        return query_func in (
+            http_soap_list,
+        )
+
+# ################################################################################################################################
+
 class _SearchWrapper(object):
     """ Wraps results in pagination and/or filters out objects by their name or other attributes.
     """
@@ -102,7 +114,12 @@ def query_wrapper(func):
         # depending on whether columns are needed or not.
         needs_columns = args[-1]
 
-        tool = _SearchWrapper(func(*args), **kwargs)
+        if _QueryConfig.supports_kwargs(func):
+            result = func(*args, **kwargs)
+        else:
+            result = func(*args)
+
+        tool = _SearchWrapper(result, **kwargs)
         result = _SearchResults(tool.q, tool.q.all(), tool.q.statement.columns, tool.total)
 
         if needs_columns:
@@ -199,6 +216,21 @@ def job_by_name(session, cluster_id, name):
         one()
 
 # ################################################################################################################################
+
+def _sec_base(session, cluster_id):
+    return session.query(
+        SecurityBase.id,
+        SecurityBase.is_active,
+        SecurityBase.sec_type,
+        SecurityBase.name,
+        SecurityBase.username).\
+        filter(SecurityBase.cluster_id==Cluster.id).\
+        filter(Cluster.id==cluster_id)
+
+def sec_base(session, cluster_id, sec_base_id):
+    return _sec_base(session, cluster_id).\
+        filter(SecurityBase.id==sec_base_id).\
+        one()
 
 @query_wrapper
 def apikey_security_list(session, cluster_id, needs_columns=False):
@@ -696,7 +728,8 @@ def http_soap(session, cluster_id, item_id=None, name=None):
     return q.one()
 
 @query_wrapper
-def http_soap_list(session, cluster_id, connection=None, transport=None, return_internal=True, needs_columns=False, **kwargs):
+def http_soap_list(session, cluster_id, connection=None, transport=None, return_internal=True, data_format=None,
+    needs_columns=False, *args, **kwargs):
     """ HTTP/SOAP connections, both channels and outgoing ones.
     """
     q = _http_soap(session, cluster_id)
@@ -709,6 +742,9 @@ def http_soap_list(session, cluster_id, connection=None, transport=None, return_
 
     if not return_internal:
         q = q.filter(not_(HTTPSOAP.name.startswith('zato')))
+
+    if data_format:
+        q = q.filter(HTTPSOAP.data_format.startswith(data_format))
 
     return q
 
