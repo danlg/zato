@@ -60,7 +60,11 @@ if ! [ -x "$(command -v $PY_BINARY)" ]; then
       fi
   elif [ "$(uname -s)" = "Darwin" ]
   then
-      brew install  $PY_BINARY
+      if [ ! "$(type -p python3)" ]
+      then
+        echo "install.sh: Python 3 not found in you system"
+        exit 1
+      fi
   else
       echo "install.sh: Unsupported OS: could not detect OS X, apt-get or yum." >&2
       exit 1
