@@ -15,6 +15,8 @@ brew install \
     libyaml openldap openssl ossp-uuid pkg-config postgresql swig \
     || true
 
+sed -i -e 's|^gevent==\(.*\)$|https://github.com/gevent/gevent/archive/\1.zip|' requirements.txt
+
 curl https://bootstrap.pypa.io/get-pip.py | $(type -p $PY_BINARY)
 $PY_BINARY -m pip install -U virtualenv --ignore-installed
 
